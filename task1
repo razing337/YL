@@ -1,0 +1,40 @@
+import pygame
+
+
+class MapApp:
+    def __init__(self, width, height, scale, map_image_path):
+        self.width = width
+        self.height = height
+        self.scale = scale
+        self.map_image_path = map_image_path
+
+        pygame.init()
+        self.screen = pygame.display.set_mode((width, height))
+        pygame.display.set_caption('Карта')
+        self.clock = pygame.time.Clock()
+
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            self.draw_map()
+            pygame.display.flip()
+            self.clock.tick(60)
+
+        pygame.quit()
+
+    def draw_map(self):
+        self.screen.fill((255, 255, 255))
+        map_image = pygame.image.load(self.map_image_path)
+        new_width = int(map_image.get_width() * self.scale)
+        new_height = int(map_image.get_height() * self.scale)
+        resized_map = pygame.transform.scale(map_image, (new_width, new_height))
+        self.screen.blit(resized_map, ((self.width - new_width) // 2, (self.height - new_height) // 2))
+
+
+if __name__ == "__main__":
+    map_app = MapApp(800, 600, 0.5, 'map_image.png')
+    map_app.run()
